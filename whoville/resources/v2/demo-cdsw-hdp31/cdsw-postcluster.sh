@@ -21,8 +21,9 @@ export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::") >> /etc/pr
 export MASTER_IP=$(hostname --ip-address)
 
 # Fetch public FQDN for Domain
-export DOMAIN=$(curl https://icanhazptr.com)
-export PUBLIC_IP='cdsw'.$(curl https://icanhazip.com)'.nip.io'
+#export DOMAIN=$(curl https://icanhazptr.com)
+export PUBLIC_IP=$(curl https://icanhazip.com)
+export DOMAIN='cdsw'.${PUBLIC_IP}.nip.io'
 
 # unmount  vols - Cloudbreak will always mount presented volumes but this isn't a datanode
 if lsblk | grep -q xvd ; then
@@ -67,7 +68,7 @@ chmod +x ./Anaconda2-5.2.0-Linux-x86_64.sh
 # CDSW Setup
 sed -i "s@MASTER_IP=\"\"@MASTER_IP=\"${MASTER_IP}\"@g" /etc/cdsw/config/cdsw.conf
 sed -i "s@JAVA_HOME=\"/usr/java/default\"@JAVA_HOME=\"$(echo ${JAVA_HOME})\"@g" /etc/cdsw/config/cdsw.conf
-sed -i "s@DOMAIN=\"cdsw.company.com\"@DOMAIN=\"${PUBLIC_IP}\"@g" /etc/cdsw/config/cdsw.conf
+sed -i "s@DOMAIN=\"cdsw.company.com\"@DOMAIN=\"${DOMAIN}\"@g" /etc/cdsw/config/cdsw.conf
 sed -i "s@DOCKER_BLOCK_DEVICES=\"\"@DOCKER_BLOCK_DEVICES=\"${DOCKER_BLOCK}\"@g" /etc/cdsw/config/cdsw.conf
 sed -i "s@APPLICATION_BLOCK_DEVICE=\"\"@APPLICATION_BLOCK_DEVICE=\"${APP_BLOCK}\"@g" /etc/cdsw/config/cdsw.conf
 sed -i "s@DISTRO=\"\"@DISTRO=\"HDP\"@g" /etc/cdsw/config/cdsw.conf
