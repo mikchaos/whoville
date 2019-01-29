@@ -1682,11 +1682,6 @@ def validate_profile():
         horton.cache['ADMINPASSWORD'] = config.profile['password']
     else:
         horton.cache['ADMINPASSWORD'] = security.get_secret('ADMINPASSWORD')
-    password_test = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d-]{12,}$')
-    if not bool(password_test.match(horton.cache['ADMINPASSWORD'])):
-        raise ValueError("Password doesn't match Platform spec."
-                         "Requires 12+ characters, at least 1 letter and "
-                         "number, may also contain -")
     # Check Provider
     provider = config.profile.get('platform')['provider']
     assert provider in ['EC2', 'AZURE_ARM', 'GCE']
